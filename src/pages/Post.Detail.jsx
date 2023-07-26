@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import CommonPageNation from "../components/pagenation/Pagenation";
+import { commentsApi, postDetailApi } from "../apis/axios";
 
 const LIMIT_TAKE = 20;
 const PostDetailPage = () => {
@@ -11,17 +12,12 @@ const PostDetailPage = () => {
   const [isOpenCommentList, setIsOpenCommentList] = useState(false);
 
   const fetchPostDetail = async () => {
-    const response = await axios.get("/api/post");
+    const response = await postDetailApi();
     setPostDetail(response.data);
   };
 
   const fetchComments = async () => {
-    const response = await axios.get("/api/comments", {
-      params: {
-        take: params.get("take") ?? LIMIT_TAKE,
-      },
-    });
-    console.log(response.data);
+    const response = await commentsApi(params, LIMIT_TAKE);
     setCommentList(response.data.Comments);
   };
 
