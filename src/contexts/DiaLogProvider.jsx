@@ -33,6 +33,7 @@ const DiaLogProvider = ({ children }) => {
       ...prev,
       ...args,
     }));
+    console.log(args);
   };
 
   const onCloseDiaLog = () => {
