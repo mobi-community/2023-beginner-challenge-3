@@ -1,0 +1,22 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+button {
+  background: none;
+  padding: 5px;
+  margin: 10px 5px;
+}
+td {
+  border-bottom: 1px solid lightgray;
+  padding: 10px 0;
+  cursor: pointer;
+  &:hover {
+    background: lightgray;
+  }
+}
+caption {
+  font-size: 2em;
+  font-weight: bold;
+}
