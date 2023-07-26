@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { DialLogState, useDiaLogStore } from '../../contexts/DialogProvider'
-import Dialog from '../../components/Dialog'
 import NameForm from './components/NameForm'
-import WeatherInfo from './components/Weather'
+import useFetch from '../../hooks/useFetch'
+import { WeatherApi } from '../../apis/weather'
 
 const HomePage = () => {
 	const [isBackGroundBlur, setIsBackGroundBlur] = useState(true)
 	const { dispatch, OpenDialog } = useDiaLogStore()
-	// console.log("isOpen: ", isOpen);
+
+	const { data, loading, error } = useFetch(WeatherApi.getTodaysTemp)
+	const weather = data?.response.body.items.item
 
 	useEffect(() => {
-		const userName = localStorage.getItem('userName')
-		return userName ? setIsBackGroundBlur(false) : setIsBackGroundBlur(true)
+		const isHaveUserName = !!localStorage.getItem('userName') // boolean
+		return setIsBackGroundBlur(!isHaveUserName)
 	}, [])
 
 	const onPressNavigateBlog = () => {
@@ -28,17 +30,19 @@ const HomePage = () => {
 		})
 	}
 
+	if (loading) {
+		return <div>로딩중...</div>
+	}
+
 	return (
 		<>
-			{isBackGroundBlur && (
-				<NameForm setIsBackGroundBlur={setIsBackGroundBlur} />
-			)}
-			<HomeContents>
+			{isBackGroundBlur && <NameForm setBlurred={setIsBackGroundBlur} />}
+			<div>
 				<h1>Home Page</h1>
-				<WeatherInfo />
+				<p>오늘의 기온</p>
+				<p>{weather.find(el => el.category === 'T1H').obsrValue}도</p>
 				<S.Button onClick={onPressNavigateBlog}>블로그 보러가기</S.Button>
-			</HomeContents>
-			<Dialog />
+			</div>
 		</>
 	)
 }

@@ -1,12 +1,12 @@
 import styled from 'styled-components'
 
-const NameForm = ({ setIsBackGroundBlur }) => {
+const NameForm = ({ setBlurred }) => {
 	const onSubmit = e => {
 		e.preventDefault()
 		const userName = e.target.userName.value.trim()
 		if (!userName) return alert('이름을 입력해주세요')
 		localStorage.setItem('userName', userName)
-		setIsBackGroundBlur(false)
+		setBlurred(false)
 		e.target.userName.value = ''
 	}
 	return (

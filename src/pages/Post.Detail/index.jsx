@@ -1,20 +1,30 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { PostApi } from '../../apis/post'
 import { IsUserName } from '../../utils/isUserName'
 import CommentList from './components/commentList'
+import useFetch from '../../hooks/useFetch'
+import useToggle from '../../hooks/useToggle'
+import { useSearchParams } from 'react-router-dom'
 
 const PostDetailPage = () => {
-	const [postDetail, setPostDetail] = useState([])
+	const [params] = useSearchParams()
 
-	const fetchPostDetail = async () => {
-		const response = await PostApi.getList({ target: 'post' })
-		setPostDetail(response.data)
-	}
+	const { isOpen: isOpenCommentList, onPressToggle } = useToggle()
+	const isShownCommentBtn = isOpenCommentList ? '숨기기' : '보기'
+
+	const { data: postDetail, loading } = useFetch(PostApi.getList, {
+		target: 'post',
+	})
 
 	useEffect(() => {
 		IsUserName()
-		fetchPostDetail()
 	}, [])
+
+	useEffect(() => {
+		if (!isOpenCommentList) return
+	}, [params, isOpenCommentList])
+
+	if (loading) return <div>로딩중...</div>
 
 	return (
 		<div>
@@ -23,7 +33,8 @@ const PostDetailPage = () => {
 				<p>제목: {postDetail.title}</p>
 				<p>내용: {postDetail.content}</p>
 			</div>
-			<CommentList />
+			<button onClick={onPressToggle}>댓글 {isShownCommentBtn}</button>
+			{isOpenCommentList && <CommentList />}
 		</div>
 	)
 }

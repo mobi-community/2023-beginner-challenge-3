@@ -1,34 +1,24 @@
-import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { DialLogState, useDiaLogStore } from '../../contexts/DialogProvider'
 import { useSearchParams } from 'react-router-dom'
 import Pagination from '../../components/pagination'
 import { PostApi } from '../../apis/post'
 import { IsUserName } from '../../utils/isUserName'
+import useFetch from '../../hooks/useFetch'
 
 const LIMIT_TAKE = 10
 const PostListPage = () => {
 	const [params] = useSearchParams()
-	const [postList, setPostList] = useState([])
 	// const [, setDiaLogAttribute] = useDiaLogStore();
 
-	const fetchPostList = async () => {
-		const response = await PostApi.getList({
-			target: 'posts',
-			params: {
-				take: params.get('take') ?? LIMIT_TAKE,
-			},
-		})
-		setPostList(response.data.Posts)
-	}
+	const { data, loading, error } = useFetch(PostApi.getList, {
+		target: 'posts',
+		params: { take: params.get('take') ?? LIMIT_TAKE },
+	})
+	const postList = data?.Posts
 
 	useEffect(() => {
 		IsUserName()
 	}, [])
-
-	useEffect(() => {
-		fetchPostList()
-	}, [params])
 
 	// const onClickPost = async (postId) => {
 	//   await setDiaLogAttribute({
@@ -66,6 +56,8 @@ const PostListPage = () => {
 		//   },
 		// });
 	}
+
+	if (loading) return <div>로딩중...</div>
 
 	return (
 		<>
