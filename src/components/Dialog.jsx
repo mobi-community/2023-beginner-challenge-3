@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
-import { DialLogState } from "../contexts/DiaLogProvider";
 import React from "react";
+import { DialLogState } from "../reducer/moveReducer";
 
 const Dialog = React.forwardRef(
   ({ type, text, onConfirm, onCancel, onClose, position }, ref) => {

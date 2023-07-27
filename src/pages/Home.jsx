@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { weatherConfig } from "../third-party/weather.config";
-import { DialLogState, useDiaLogStore } from "../contexts/DiaLogProvider";
+import { useDiaLogStore } from "../contexts/DiaLogProvider";
 
 const HomePage = () => {
   const [isBackGroundBlur, setIsBackGroundBlur] = useState(true);
   const [weather, setWeather] = useState();
-  const [, setDiaLogAttribute] = useDiaLogStore();
+  const [, setDiaLogAttribute, dispatch] = useDiaLogStore();
 
   const fetchWeather = async () => {
     try {
@@ -50,14 +50,21 @@ const HomePage = () => {
   };
 
   const onPressNavigateBlog = () => {
-    setDiaLogAttribute({
-      type: DialLogState.ALERT,
+    // setDiaLogAttribute({
+    //   type: DialLogState.ALERT,
+    //   text: "정말로 페이지를 이동하겠습니까",
+    //   isOpen: true,
+    //   onConfirm: async () => {
+    //     await setDiaLogAttribute({ isOpen: false });
+    //     window.location.href = "/posts";
+    //   },
+    // });
+    dispatch({type: 'ALERT', payload: {      
+      // type: DialLogState.ALERT,
       text: "정말로 페이지를 이동하겠습니까",
-      isOpen: true,
-      onConfirm: async () => {
-        await setDiaLogAttribute({ isOpen: false });
-        window.location.href = "/posts";
-      },
+      state: true,
+      urlEndPoint: "/posts"
+    }
     });
   };
 

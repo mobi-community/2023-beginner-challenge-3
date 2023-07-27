@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { DialLogState, useDiaLogStore } from "../contexts/DiaLogProvider";
+import {  useDiaLogStore } from "../contexts/DiaLogProvider";
 import { useSearchParams } from "react-router-dom";
 import CommonPageNation from "../components/pagenation/Pagenation";
 import { postsApi } from "../apis/axios";
@@ -9,7 +9,7 @@ const LIMIT_TAKE = 10;
 const PostListPage = () => {
   const [params] = useSearchParams();
   const [postList, setPostList] = useState([]);
-  const [, setDiaLogAttribute] = useDiaLogStore();
+  const [, setDiaLogAttribute, dispatch] = useDiaLogStore();
 
   const fetchPostList = async () => {
     const response = await postsApi(params, LIMIT_TAKE)
@@ -29,22 +29,27 @@ const PostListPage = () => {
   }, [params]);
 
   const onClickPost = async (postId) => {
-    await setDiaLogAttribute({
-      type: DialLogState.CONFIRM,
-      text: "정말로 페이지를 이동하겠습니까",
-      isOpen: true,
-      onConfirm: async () => {
-        await setDiaLogAttribute({
-          text: "정말로 이동해버린다요!",
-          onConfirm: async () => {
-            window.location.href = `/post-detail/${postId}`;
-          },
-        });
-      },
-      onCancel: () => {
-        setDiaLogAttribute({ isOpen: false });
-      },
-    });
+    // await setDiaLogAttribute({
+    //   type: DialLogState.CONFIRM,
+    //   text: "정말로 페이지를 이동하겠습니까",
+    //   isOpen: true,
+    //   onConfirm: async () => {
+    //     await setDiaLogAttribute({
+    //       text: "정말로 이동해버린다요!",
+    //       onConfirm: async () => {
+    //         window.location.href = `/post-detail/${postId}`;
+    //       },
+    //     });
+    //   },
+    //   onCancel: () => {
+    //     setDiaLogAttribute({ isOpen: false });
+    //   },
+    // });
+    dispatch({type: 'CONFIRM', payload: {
+      text: "정말로 정말로 페이지를 이동하겠습니까",
+        text2: "정말로 이동해버린다요!",
+        urlEndPoint: `/post-detail/${postId}`
+    }})
   };
 
   return (
