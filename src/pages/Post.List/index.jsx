@@ -1,63 +1,46 @@
 import { useEffect, useState } from 'react'
+import { DialLogState } from '../../contexts/DiaLogProvider'
 import { useSearchParams } from 'react-router-dom'
 import Pagination from '../../components/pagination'
 import { PostApi } from '../../apis/post'
 import { IsUserName } from '../../utils/isUserName'
+import Dialog from '../../components/Dialog'
 import useFetch from '../../hooks/useFetch'
+import useDialog from '../../hooks/useDialog'
 
 const LIMIT_TAKE = 10
 const PostListPage = () => {
+	const dialog = useDialog()
 	const [params] = useSearchParams()
-	// const [, setDiaLogAttribute] = useDiaLogStore();
 
-	const { data, loading, error } = useFetch(PostApi.getList, {
-		target: 'posts',
-		params: { take: params.get('take') ?? LIMIT_TAKE },
-	})
+	const { data } = useFetch(
+		PostApi.getList,
+		{
+			target: 'posts',
+			params: {
+				take: params.get('take') ?? LIMIT_TAKE,
+			},
+		},
+		params,
+	)
 	const postList = data?.Posts
 
 	useEffect(() => {
 		IsUserName()
 	}, [])
 
-	// const onClickPost = async (postId) => {
-	//   await setDiaLogAttribute({
-	//     type: DialLogState.CONFIRM,
-	//     text: "정말로 페이지를 이동하겠습니까",
-	//     isOpen: true,
-	//     onConfirm: async () => {
-	//       await setDiaLogAttribute({
-	//         text: "정말로 이동해버린다요!",
-	//         onConfirm: async () => {
-	//           window.location.href = `/post-detail/${postId}`;
-	//         },
-	//       });
-	//     },
-	//     onCancel: () => {
-	//       setDiaLogAttribute({ isOpen: false });
-	//     },
-	//   });
-	// };
 	const onClickPost = async postId => {
-		// await setDiaLogAttribute({
-		//   type: DialLogState.CONFIRM,
-		//   text: "정말로 페이지를 이동하겠습니까",
-		//   isOpen: true,
-		//   onConfirm: async () => {
-		//     await setDiaLogAttribute({
-		//       text: "정말로 이동해버린다요!",
-		//       onConfirm: async () => {
-		//         window.location.href = `/post-detail/${postId}`;
-		//       },
-		//     });
-		//   },
-		//   onCancel: () => {
-		//     setDiaLogAttribute({ isOpen: false });
-		//   },
-		// });
+		dialog.default({
+			type: DialLogState.CONFIRM,
+			text: '정말로 페이지를 이동하겠습니까',
+			onConfirm: () => {
+				dialog.moveTo({
+					text: '정말로 이동해버린다요!',
+					url: `/post-detail/${postId}`,
+				})
+			},
+		})
 	}
-
-	if (loading) return <div>로딩중...</div>
 
 	return (
 		<>
@@ -68,7 +51,7 @@ const PostListPage = () => {
 					<th>내용</th>
 					<th>작성자</th>
 				</tr>
-				{postList.map(post => (
+				{postList?.map(post => (
 					<tr key={post.id} onClick={() => onClickPost(post.id)}>
 						<td>{post.title}</td>
 						<td>{post.content}</td>
@@ -77,6 +60,7 @@ const PostListPage = () => {
 				))}
 			</table>
 			<Pagination target={'posts'} />
+			<Dialog />
 		</>
 	)
 }

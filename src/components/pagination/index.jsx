@@ -1,34 +1,26 @@
-import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { PostApi } from '../../apis/post'
+import useFetch from '../../hooks/useFetch'
 
 const LIMIT_PAGE = 10
 const LIMIT_TAKE = 20
 
 const Pagination = ({ target }) => {
 	const [params, setParams] = useSearchParams()
-	const [pageNation, setPageNation] = useState()
-
-	const fetchCommentPageNation = async () => {
-		const response = await PostApi.getList({
+	const { data } = useFetch(
+		PostApi.getList,
+		{
 			target,
 			params: {
 				page: params.get('page') ?? 1,
 				take: params.get('take') ?? LIMIT_TAKE,
 				limit: params.get('limit') ?? LIMIT_PAGE,
 			},
-		})
-		const pageNation = response.data.PageNation
-		setPageNation({
-			...pageNation,
-		})
-	}
-
-	useEffect(() => {
-		fetchCommentPageNation()
-	}, [params])
-
-	console.log(pageNation)
+		},
+		params,
+	)
+	console.log('pagination', data?.PageNation)
+	const pageNation = data?.PageNation
 
 	const onClickPage = page => {
 		setParams({
