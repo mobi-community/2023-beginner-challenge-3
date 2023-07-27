@@ -1,15 +1,16 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import CommonPageNation from "../components/pagenation/Pagenation";
 import { commentsApi, postDetailApi } from "../apis/axios";
+import useToggleChange from "../customHook/useToggleChange";
 
 const LIMIT_TAKE = 20;
 const PostDetailPage = () => {
   const [params] = useSearchParams();
   const [postDetail, setPostDetail] = useState([]);
   const [commentList, setCommentList] = useState([]);
-  const [isOpenCommentList, setIsOpenCommentList] = useState(false);
+  // const [isOpenCommentList, setIsOpenCommentList] = useState(false);
+  const { isToggle: isOpenCommentList, toggleChange } = useToggleChange()
 
   const fetchPostDetail = async () => {
     const response = await postDetailApi();
@@ -21,14 +22,14 @@ const PostDetailPage = () => {
     setCommentList(response.data.Comments);
   };
 
-  const onClickMoreComments = async () => {
-    setIsOpenCommentList(true);
-    fetchComments();
-  };
+  // const onClickMoreComments = async () => {
+  //   setIsOpenCommentList(true);
+  //   fetchComments();
+  // };
 
-  const onClickHiddenComments = () => {
-    setIsOpenCommentList(false);
-  };
+  // const onClickHiddenComments = () => {
+  //   setIsOpenCommentList(false);
+  // };
 
   useEffect(() => {
     const userName = localStorage.getItem("userName");
@@ -42,7 +43,7 @@ const PostDetailPage = () => {
   useEffect(() => {
     if (!isOpenCommentList) return;
     fetchComments();
-  }, [params]);
+  }, [isOpenCommentList, params]);
 
   return (
     <div>
@@ -51,10 +52,10 @@ const PostDetailPage = () => {
         <p>제목: {postDetail.title}</p>
         <p>내용: {postDetail.content}</p>
         {!isOpenCommentList && (
-          <button onClick={onClickMoreComments}>댓글 보기</button>
+          <button onClick={toggleChange}>댓글 보기</button>
         )}
         {isOpenCommentList && (
-          <button onClick={onClickHiddenComments}>댓글 숨기기</button>
+          <button onClick={toggleChange}>댓글 숨기기</button>
         )}
         {isOpenCommentList && (
           <>
