@@ -1,7 +1,7 @@
-export const FetchApi = async (api, setState, params, LIMIT_TAKE) => {
+export const FetchApi = async (api, setState, params, key, LIMIT_TAKE) => {
     const res = await api(params, LIMIT_TAKE);
-    if(res.data.Comments){
-        return setState(res.data.Comments)
+    if(res.data[key]){
+        return setState(res.data[key])
     } else
     return setState(res.data);
 }

@@ -23,7 +23,7 @@ const PostDetailPage = () => {
 
   useEffect(() => {
     if (!isOpenCommentList) return;
-    FetchApi(commentsApi, setCommentList, params, LIMIT_TAKE);
+    FetchApi(commentsApi, setCommentList, params, "Comments", LIMIT_TAKE);
   }, [isOpenCommentList, params]);
 
   return (
