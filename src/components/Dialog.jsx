@@ -1,32 +1,19 @@
 import styled from 'styled-components'
-import { DialLogState, useDiaLogStore } from '../contexts/DialogProvider'
-import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { DialLogState, useDiaLogStore } from '../contexts/DiaLogProvider'
+import React from 'react'
 
 const Dialog = () => {
-	const { state, isOpen, CloseDialog } = useDiaLogStore()
-	const { type, text, position, url } = state
-
-	const navigate = useNavigate()
-
-	const handleConfirm = () => {
-		if (url) {
-			navigate(url)
-		}
-		CloseDialog()
-	}
-
-	useEffect(() => {
-		console.log('Dialog isOpen (inside useEffect): ', isOpen)
-	}, [isOpen])
+	const {
+		state: { type, text, isOpen, onConfirm, onCancel, onClose, position },
+	} = useDiaLogStore()
 
 	return isOpen ? (
 		<S.Wrapper $position={position}>
-			<S.CloseButton onClick={() => CloseDialog()}>x</S.CloseButton>
+			<S.CloseButton onClick={onClose}>x</S.CloseButton>
 			{text}
-			<S.Button onClick={handleConfirm}>확인</S.Button>
+			<S.Button onClick={onConfirm}>확인</S.Button>
 			{type === DialLogState.CONFIRM && (
-				<S.Button onClick={() => CloseDialog()}>취소</S.Button>
+				<S.Button onClick={onCancel}>취소</S.Button>
 			)}
 		</S.Wrapper>
 	) : null

@@ -1,4 +1,5 @@
 import { createContext, useContext, useReducer, useState } from 'react'
+import { createAction } from '../utils/createAction'
 
 export const DialLogState = {
 	ALERT: 'ALERT',
@@ -7,43 +8,56 @@ export const DialLogState = {
 
 const DiaLogContext = createContext()
 
-const initialState = {
-	type: '',
+// 전역 관리하고 싶은 state
+const initialDialogAttr = {
+	type: DialLogState.ALERT,
 	text: '',
-	position: { x: 50, y: 10 },
+	isOpen: false,
+	onConfirm: () => {},
+	onCancel: () => {},
+	position: {
+		x: 50,
+		y: 10,
+	},
 }
 
-// case: alert, confirm
-// confirm에서 action.payload: confirm/cancle
-const DiaLogReducer = (state, action) => {
+export const MOVE_TO_PAGE_DIALOG = createAction('move_to_page')
+export const DEFAULT_DIALOG = createAction('default')
+export const CLOSE_DIALOG = createAction('close')
+
+const dialogReducer = (state, action) => {
+	// action은 dispatch를 통해 전달받은 객체
 	switch (action.type) {
-		case DialLogState.ALERT:
-			return { ...state, ...action.payload }
-		// case DialLogState.CONFIRM:
-		//   return { ...state, ...action.payload };
+		case 'default':
+			return {
+				...state,
+				type: DialLogState.ALERT,
+				isOpen: true,
+				...action.payload,
+			}
+		case 'move_to_page':
+			return {
+				...state,
+				isOpen: true,
+				type: DialLogState.ALERT, // default
+				text: '페이지를 이동합니다.',
+				onConfirm: () => (window.location.href = `${action.payload.url}`),
+				...action.payload,
+			}
+		case 'close':
+			return { ...state, isOpen: false }
 		default:
-			return state
+			return { ...state }
 	}
 }
 
 export const useDiaLogStore = () => useContext(DiaLogContext)
 
 const DiaLogProvider = ({ children }) => {
-	const [isOpen, setIsOpen] = useState(false)
-	const [state, dispatch] = useReducer(DiaLogReducer, initialState)
-
-	const OpenDialog = () => {
-		setIsOpen(true)
-	}
-
-	const CloseDialog = () => {
-		setIsOpen(false)
-	}
+	const [state, dispatch] = useReducer(dialogReducer, initialDialogAttr)
 
 	return (
-		<DiaLogContext.Provider
-			value={{ state, dispatch, isOpen, OpenDialog, CloseDialog }}
-		>
+		<DiaLogContext.Provider value={{ state, dispatch }}>
 			{children}
 		</DiaLogContext.Provider>
 	)
