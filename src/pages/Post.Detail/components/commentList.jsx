@@ -7,10 +7,14 @@ import useFetch from '../../../hooks/useFetch'
 const LIMIT_TAKE = 20
 const CommentList = () => {
 	const [params] = useSearchParams()
-	const { data: commentResponse, loading } = useFetch(PostApi.getList, {
-		target: 'comments',
-		params: { take: params.get('take') ?? LIMIT_TAKE },
-	})
+	const { data: commentResponse, loading } = useFetch(
+		PostApi.getList,
+		{
+			target: 'comments',
+			params: { take: params.get('take') ?? LIMIT_TAKE },
+		},
+		params,
+	)
 	const commentList = commentResponse?.Comments
 
 	if (loading) return <div>로딩중...</div>

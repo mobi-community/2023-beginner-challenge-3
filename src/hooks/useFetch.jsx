@@ -9,7 +9,7 @@ import { useState } from 'react'
  * @property {boolean} loading - 데이터 요청이 진행 중인지를 나타내는 상태입니다.
  * @property {string|null} error - 데이터 요청 중 발생한 에러 객체입니다. 에러가 없을 경우에는 null입니다.
  */
-const useFetch = (fetching, object) => {
+const useFetch = (fetching, object, dependency) => {
 	const [data, setData] = useState(null)
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState(null)
@@ -28,7 +28,7 @@ const useFetch = (fetching, object) => {
 			}
 		}
 		fetchData()
-	}, [fetching])
+	}, [fetching, dependency])
 	return { data, loading, error }
 }
 export default useFetch
