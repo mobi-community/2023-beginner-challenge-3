@@ -3,33 +3,14 @@ import { useSearchParams } from "react-router-dom";
 import CommonPageNation from "../components/pagenation/Pagenation";
 import { commentsApi, postDetailApi } from "../apis/axios";
 import useToggleChange from "../customHook/useToggleChange";
+import { FetchApi } from "../customHook/useFetchApi";
 
 const LIMIT_TAKE = 20;
 const PostDetailPage = () => {
   const [params] = useSearchParams();
   const [postDetail, setPostDetail] = useState([]);
   const [commentList, setCommentList] = useState([]);
-  // const [isOpenCommentList, setIsOpenCommentList] = useState(false);
   const { isToggle: isOpenCommentList, toggleChange } = useToggleChange()
-
-  const fetchPostDetail = async () => {
-    const response = await postDetailApi();
-    setPostDetail(response.data);
-  };
-
-  const fetchComments = async () => {
-    const response = await commentsApi(params, LIMIT_TAKE);
-    setCommentList(response.data.Comments);
-  };
-
-  // const onClickMoreComments = async () => {
-  //   setIsOpenCommentList(true);
-  //   fetchComments();
-  // };
-
-  // const onClickHiddenComments = () => {
-  //   setIsOpenCommentList(false);
-  // };
 
   useEffect(() => {
     const userName = localStorage.getItem("userName");
@@ -37,12 +18,12 @@ const PostDetailPage = () => {
       alert("로그인이 필요합니다");
       window.location.href = "/";
     }
-    fetchPostDetail();
+    FetchApi(postDetailApi, setPostDetail);
   }, []);
 
   useEffect(() => {
     if (!isOpenCommentList) return;
-    fetchComments();
+    FetchApi(commentsApi, setCommentList, params, LIMIT_TAKE);
   }, [isOpenCommentList, params]);
 
   return (
