@@ -1,9 +1,7 @@
-import { useEffect, useState } from 'react'
 import { DialLogState } from '../../contexts/DiaLogProvider'
 import { useSearchParams } from 'react-router-dom'
 import Pagination from '../../components/pagination'
 import { PostApi } from '../../apis/post'
-import { IsUserName } from '../../utils/isUserName'
 import Dialog from '../../components/Dialog'
 import useFetch from '../../hooks/useFetch'
 import useDialog from '../../hooks/useDialog'
@@ -24,10 +22,6 @@ const PostListPage = () => {
 		params,
 	)
 	const postList = data?.Posts
-
-	useEffect(() => {
-		IsUserName()
-	}, [])
 
 	const onClickPost = async postId => {
 		dialog.default({

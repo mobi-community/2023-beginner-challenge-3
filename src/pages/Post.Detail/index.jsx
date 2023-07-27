@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { PostApi } from '../../apis/post'
-import { IsUserName } from '../../utils/isUserName'
 import CommentList from './components/commentList'
 import useFetch from '../../hooks/useFetch'
 import useToggle from '../../hooks/useToggle'
@@ -15,10 +14,6 @@ const PostDetailPage = () => {
 	const { data: postDetail, loading } = useFetch(PostApi.getList, {
 		target: 'post',
 	})
-
-	useEffect(() => {
-		IsUserName()
-	}, [])
 
 	useEffect(() => {
 		if (!isOpenCommentList) return

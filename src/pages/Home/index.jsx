@@ -10,7 +10,7 @@ const HomePage = () => {
 	const dialog = useDialog()
 	const [isBackGroundBlur, setIsBackGroundBlur] = useState(true)
 
-	const { data, loading, error } = useFetch(WeatherApi.getTodaysTemp)
+	const { data, loading } = useFetch(WeatherApi.getTodaysTemp)
 	const weather = data?.response.body.items.item
 
 	useEffect(() => {
