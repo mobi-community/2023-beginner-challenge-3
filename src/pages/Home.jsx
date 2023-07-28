@@ -7,7 +7,7 @@ import { useDiaLogStore } from "../contexts/DiaLogProvider";
 const HomePage = () => {
   const [isBackGroundBlur, setIsBackGroundBlur] = useState(true);
   const [weather, setWeather] = useState();
-  const [, setDiaLogAttribute, dispatch] = useDiaLogStore();
+  const {dispatch} = useDiaLogStore();
 
   const fetchWeather = async () => {
     try {

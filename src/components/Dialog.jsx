@@ -1,16 +1,21 @@
 import { styled } from "styled-components";
 import React from "react";
 import { DialLogState } from "../reducer/moveReducer";
+import { useDiaLogStore } from "../contexts/DiaLogProvider";
 
 const Dialog = React.forwardRef(
-  ({ type, text, onConfirm, onCancel, onClose, position }, ref) => {
+  ({}, ref) => {
+    const { diaLogAttribute, dispatch } = useDiaLogStore();
+
+    const { type, text, onConfirm, position } = diaLogAttribute;
+
     return (
       <S.Wrapper ref={ref} $position={position}>
-        <button onClick={onClose}>x</button>
+        <button onClick={() => dispatch({type:'onCloseDialog'})}>x</button>
         {text}
         <S.Button onClick={onConfirm}>확인</S.Button>
         {type === DialLogState.CONFIRM && (
-          <S.Button onClick={onCancel}>취소</S.Button>
+          <S.Button onClick={() => dispatch({type:'onCloseDialog'})}>취소</S.Button>
         )}
       </S.Wrapper>
     );

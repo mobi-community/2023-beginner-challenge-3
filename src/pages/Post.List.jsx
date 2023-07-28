@@ -9,7 +9,7 @@ const LIMIT_TAKE = 10;
 const PostListPage = () => {
   const [params] = useSearchParams();
   const [postList, setPostList] = useState([]);
-  const [, setDiaLogAttribute, dispatch] = useDiaLogStore();
+  const {dispatch} = useDiaLogStore();
 
   useEffect(() => {
     const userName = localStorage.getItem("userName");

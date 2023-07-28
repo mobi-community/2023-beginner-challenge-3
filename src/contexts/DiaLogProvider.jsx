@@ -32,19 +32,13 @@ const DiaLogProvider = ({ children }) => {
     dispatch({type: 'keepPrevDialogAttribute', payload: args} )
   };
 
-  const onCloseDiaLog = () => {
-    dispatch({type:'onCloseDialog'})
-  };
-
   return (
     <DiaLogContext.Provider
-      value={[diaLogAttribute, setKeepPrevDialogAttribute, dispatch]}
+      value={{diaLogAttribute, setKeepPrevDialogAttribute, dispatch}}
     >
       {children}
       <Dialog
-        {...{ ...diaLogAttribute }}
         ref={diaLogRef}
-        onClose={onCloseDiaLog}
       />
     </DiaLogContext.Provider>
   );
