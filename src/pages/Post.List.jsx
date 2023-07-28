@@ -28,9 +28,11 @@ const PostListPage = () => {
       text: "정말로 정말로 페이지를 이동하겠습니까",
       confirm : () => {
         dispatch({
-          type : 'RE_CONFIRM',
+          type : 'CONFIRM',
           payload : {
             text : "정말로 이동해버린다용",
+            state: true,
+            state2: true,
             urlEndPoint: `/post-detail/${postId}`,
           }
         })

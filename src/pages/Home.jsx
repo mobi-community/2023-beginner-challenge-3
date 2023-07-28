@@ -50,17 +50,7 @@ const HomePage = () => {
   };
 
   const onPressNavigateBlog = () => {
-    // setDiaLogAttribute({
-    //   type: DialLogState.ALERT,
-    //   text: "정말로 페이지를 이동하겠습니까",
-    //   isOpen: true,
-    //   onConfirm: async () => {
-    //     await setDiaLogAttribute({ isOpen: false });
-    //     window.location.href = "/posts";
-    //   },
-    // });
     dispatch({type: 'ALERT', payload: {      
-      // type: DialLogState.ALERT,
       text: "정말로 페이지를 이동하겠습니까",
       state: true,
       urlEndPoint: "/posts"
