@@ -5,17 +5,24 @@ import { styled } from 'styled-components'
 import useFetch from '../../../hooks/useFetch'
 
 const LIMIT_TAKE = 20
+const LIMIT_PAGE = 10
+
 const CommentList = () => {
-	const [params] = useSearchParams()
+	const [params, setParams] = useSearchParams()
 	const { data: commentResponse, loading } = useFetch(
 		PostApi.getList,
 		{
 			target: 'comments',
-			params: { take: params.get('take') ?? LIMIT_TAKE },
+			params: {
+				take: params.get('take') ?? LIMIT_TAKE,
+				page: params.get('page') ?? 1,
+				limit: params.get('limit') ?? LIMIT_PAGE,
+			},
 		},
 		params,
 	)
 	const commentList = commentResponse?.Comments
+	const pageNation = commentResponse?.PageNation
 
 	if (loading) return <div>로딩중...</div>
 
@@ -31,7 +38,7 @@ const CommentList = () => {
 					</p>
 				</S.Comment>
 			))}
-			<Pagination target={'comments'} />
+			<Pagination pageNation={pageNation} setParams={setParams} />
 		</>
 	)
 }

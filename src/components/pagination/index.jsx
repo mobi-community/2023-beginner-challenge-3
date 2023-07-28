@@ -1,27 +1,4 @@
-import { useSearchParams } from 'react-router-dom'
-import { PostApi } from '../../apis/post'
-import useFetch from '../../hooks/useFetch'
-
-const LIMIT_PAGE = 10
-const LIMIT_TAKE = 20
-
-const Pagination = ({ target }) => {
-	const [params, setParams] = useSearchParams()
-	const { data } = useFetch(
-		PostApi.getList,
-		{
-			target,
-			params: {
-				page: params.get('page') ?? 1,
-				take: params.get('take') ?? LIMIT_TAKE,
-				limit: params.get('limit') ?? LIMIT_PAGE,
-			},
-		},
-		params,
-	)
-	console.log('pagination', data?.PageNation)
-	const pageNation = data?.PageNation
-
+const Pagination = ({ pageNation, setParams, LIMIT_PAGE = 10 }) => {
 	const onClickPage = page => {
 		setParams({
 			page,

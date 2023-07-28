@@ -7,9 +7,11 @@ import useFetch from '../../hooks/useFetch'
 import useDialog from '../../hooks/useDialog'
 
 const LIMIT_TAKE = 10
+const LIMIT_PAGE = 10
+
 const PostListPage = () => {
 	const dialog = useDialog()
-	const [params] = useSearchParams()
+	const [params, setParams] = useSearchParams()
 
 	const { data } = useFetch(
 		PostApi.getList,
@@ -17,22 +19,26 @@ const PostListPage = () => {
 			target: 'posts',
 			params: {
 				take: params.get('take') ?? LIMIT_TAKE,
+				page: params.get('page') ?? 1,
+				limit: params.get('limit') ?? LIMIT_PAGE,
 			},
 		},
 		params,
 	)
 	const postList = data?.Posts
+	const pageNation = data?.PageNation
 
 	const onClickPost = async postId => {
 		dialog.default({
 			type: DialLogState.CONFIRM,
 			text: '정말로 페이지를 이동하겠습니까',
-			onConfirm: () => {
-				dialog.moveTo({
-					text: '정말로 이동해버린다요!',
-					url: `/post-detail/${postId}`,
-				})
-			},
+			url: `/post-detail/${postId}`,
+			// onConfirm: () => {
+			// 	dialog.moveTo({
+			// 		text: '정말로 이동해버린다요!',
+			// 		url: `/post-detail/${postId}`,
+			// 	})
+			// },
 		})
 	}
 
@@ -53,7 +59,7 @@ const PostListPage = () => {
 					</tr>
 				))}
 			</table>
-			<Pagination target={'posts'} />
+			<Pagination pageNation={pageNation} setParams={setParams} />
 			<Dialog />
 		</>
 	)
