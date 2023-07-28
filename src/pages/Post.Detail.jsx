@@ -32,12 +32,9 @@ const PostDetailPage = () => {
       <div>
         <p>제목: {postDetail.title}</p>
         <p>내용: {postDetail.content}</p>
-        {!isOpenCommentList && (
-          <button onClick={toggleChange}>댓글 보기</button>
-        )}
-        {isOpenCommentList && (
-          <button onClick={toggleChange}>댓글 숨기기</button>
-        )}
+        <button onClick={toggleChange}>
+          {!isOpenCommentList ? "댓글 보기" : "댓글 숨기기"}
+        </button>
         {isOpenCommentList && (
           <>
             {commentList.map((comment) => (
