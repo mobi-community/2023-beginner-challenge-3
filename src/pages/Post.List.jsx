@@ -26,8 +26,15 @@ const PostListPage = () => {
   const onClickPost = async (postId) => {
     dispatch({type: 'CONFIRM', payload: {
       text: "정말로 정말로 페이지를 이동하겠습니까",
-        text2: "정말로 이동해버린다요!",
-        urlEndPoint: `/post-detail/${postId}`
+      confirm : () => {
+        dispatch({
+          type : 'RE_CONFIRM',
+          payload : {
+            text : "정말로 이동해버린다용",
+            urlEndPoint: `/post-detail/${postId}`,
+          }
+        })
+      }
     }})
   };
 

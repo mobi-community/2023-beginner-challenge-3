@@ -25,15 +25,25 @@ export default function listReducer(state, action) {
                 ...state,
                 type: DialLogState.CONFIRM,
                 text: action.payload.text,
-                isOpen: true 
+                isOpen: true, 
+                onConfirm: action.payload.confirm
             };
 
-            modal.onConfirm = async () => {
-                modal.text = action.payload.text2,
-                window.location.href = action.payload.urlEndPoint;
-            }
             modal.onCancel = () => {
                 modal.isOpen = false;
+            }
+            return modal;
+        }
+
+        case 'RE_CONFIRM' : {
+            const modal = {
+                ...state,
+                type: DialLogState.CONFIRM,
+                text: action.payload.text,
+                isOpen: true 
+            };
+            modal.onConfirm = () => {
+                window.location.href = action.payload.urlEndPoint;
             }
             return modal;
         }
