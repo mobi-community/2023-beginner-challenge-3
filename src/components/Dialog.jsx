@@ -6,7 +6,6 @@ import { useDiaLogStore } from "../contexts/DiaLogProvider";
 const Dialog = React.forwardRef(
   ({}, ref) => {
     const { diaLogAttribute, dispatch } = useDiaLogStore();
-
     const { type, text, onConfirm, position } = diaLogAttribute;
 
     return (

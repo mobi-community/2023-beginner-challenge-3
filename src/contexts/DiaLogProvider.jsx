@@ -18,7 +18,6 @@ const DiaLogContext = createContext();
 
 export const useDiaLogStore = () => useContext(DiaLogContext);
 
-
 const DiaLogProvider = ({ children }) => {
   const diaLogRef = useRef();
   const [diaLogAttribute, dispatch] = useReducer(listReducer, initialState);
