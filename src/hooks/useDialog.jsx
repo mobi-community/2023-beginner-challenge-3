@@ -6,24 +6,32 @@ import {
 } from '../contexts/DiaLogProvider'
 
 const useDialog = () => {
-	const { dispatch } = useDiaLogStore()
+	const { dispatch, setIsOpen } = useDiaLogStore()
+
+	const onClose = () => setIsOpen(false)
 
 	return {
-		default: attr =>
+		default: attr => {
+			setIsOpen(true)
 			dispatch(
 				DEFAULT_DIALOG({
-					onCancel: () => dispatch(CLOSE_DIALOG()),
+					onClose: () => onClose(),
+					onCancel: () => onClose(),
 					...attr,
 				}),
-			),
-		moveTo: attr =>
+			)
+		},
+		moveTo: attr => {
+			setIsOpen(true)
 			dispatch(
 				MOVE_TO_PAGE_DIALOG({
-					onCancel: () => dispatch(CLOSE_DIALOG()),
+					onClose: () => onClose(),
+					onCancel: () => onClose(),
 					...attr,
 				}),
-			),
-		close: () => dispatch(CLOSE_DIALOG()),
+			)
+		},
+		close: () => onClose(),
 	}
 }
 

@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer } from 'react'
+import { createContext, useContext, useReducer, useState } from 'react'
 import { createAction } from '../utils/createAction'
 
 export const DialLogState = {
@@ -8,11 +8,9 @@ export const DialLogState = {
 
 const DiaLogContext = createContext()
 
-// 전역 관리하고 싶은 state
 const initialDialogAttr = {
 	type: DialLogState.ALERT,
 	text: '',
-	isOpen: false,
 	onConfirm: () => {},
 	onCancel: () => {},
 	position: {
@@ -26,26 +24,21 @@ export const DEFAULT_DIALOG = createAction('default')
 export const CLOSE_DIALOG = createAction('close')
 
 const dialogReducer = (state, action) => {
-	// action은 dispatch를 통해 전달받은 객체
 	switch (action.type) {
 		case 'default':
 			return {
 				...state,
 				type: DialLogState.ALERT,
-				isOpen: true,
 				...action.payload,
 			}
 		case 'move_to_page':
 			return {
 				...state,
-				isOpen: true,
 				type: DialLogState.ALERT, // default
 				text: '페이지를 이동합니다.',
 				onConfirm: () => (window.location.href = `${action.payload.url}`),
 				...action.payload,
 			}
-		case 'close':
-			return { ...state, isOpen: false }
 		default:
 			return { ...state }
 	}
@@ -54,10 +47,11 @@ const dialogReducer = (state, action) => {
 export const useDiaLogStore = () => useContext(DiaLogContext)
 
 const DiaLogProvider = ({ children }) => {
+	const [isOpen, setIsOpen] = useState(false)
 	const [state, dispatch] = useReducer(dialogReducer, initialDialogAttr)
 
 	return (
-		<DiaLogContext.Provider value={{ state, dispatch }}>
+		<DiaLogContext.Provider value={{ state, dispatch, isOpen, setIsOpen }}>
 			{children}
 		</DiaLogContext.Provider>
 	)

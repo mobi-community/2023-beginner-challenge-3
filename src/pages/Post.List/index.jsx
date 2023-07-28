@@ -32,13 +32,12 @@ const PostListPage = () => {
 		dialog.default({
 			type: DialLogState.CONFIRM,
 			text: '정말로 페이지를 이동하겠습니까',
-			url: `/post-detail/${postId}`,
-			// onConfirm: () => {
-			// 	dialog.moveTo({
-			// 		text: '정말로 이동해버린다요!',
-			// 		url: `/post-detail/${postId}`,
-			// 	})
-			// },
+			onConfirm: () => {
+				dialog.moveTo({
+					text: '정말로 이동해버린다요!',
+					url: `/post-detail/${postId}`,
+				})
+			},
 		})
 	}
 

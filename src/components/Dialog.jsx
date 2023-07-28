@@ -4,7 +4,8 @@ import React from 'react'
 
 const Dialog = () => {
 	const {
-		state: { type, text, isOpen, onConfirm, onCancel, onClose, position },
+		state: { type, text, onConfirm, onCancel, onClose, position },
+		isOpen,
 	} = useDiaLogStore()
 
 	return isOpen ? (
@@ -18,7 +19,6 @@ const Dialog = () => {
 		</S.Wrapper>
 	) : null
 }
-// 개발자 도구에서 컴포넌트의 이름을 확인할 때 사용됨
 Dialog.displayName = 'dialog'
 export default Dialog
 
