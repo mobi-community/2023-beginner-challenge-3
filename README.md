@@ -175,4 +175,30 @@
    게시글 목록에 사용되는 페이지네이션과, 댓글 목록에 사용되는 페이지네이션은
    API CALL에 사용되는 endpoint만 다를 뿐 동일한 코드를 사용하는 컴포넌트였습니다.
    하여, 불필요한 파일을 줄이고 페이지네이션이 재사용 가능한 공용 컴포넌트가 되도록 코드를 수정하였습니다.
+   +) 덧붙여, msw로 페이지네이션 데이터를 요청하는 부분에서도 반복되는 로직이 있어 utils > handlePagination.js에 분리하였습니다.
    ```
+
+### Route 관련 로직 관심사 분리
+1. routes 파일 생성
+   ```
+   App.jsx에서 routing 관련 로직을 분리하여 routing 폴더의 routing.jsx에 구현였습니다.
+   ```
+2. private route 적용
+      ```
+      userName의 존재 여부에 따라 페이지의 접근을 제한하는 로직을 페이지 내에서 분리하고,
+      private route를 통해 구현함으로써 관심사 분리하였습니다.
+      ```
+
+      ```jsx
+      const PrivateRoute = () => {
+   	const isHaveUserName = !!localStorage.getItem('userName')
+   
+   	useEffect(() => {
+   		if (!isHaveUserName) {
+   			alert('로그인이 필요합니다.')
+   			window.location.href = '/'
+   		}
+   	}, [])
+   	return isHaveUserName ? <Outlet /> : null
+   }
+      ```
